@@ -15,8 +15,12 @@ import {
 import '@fontsource/roboto';
 
 const useStyles = makeStyles((theme) => ({
+  
   root: {
-    flexGrow: 1,
+    '& > *': {
+      margin: theme.spacing(0),
+    },
+    flexGrow: 1.4,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -28,29 +32,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'block',
     },
   },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  
   inputRoot: {
     color: 'inherit',
   },
@@ -69,12 +51,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
 
 
 
@@ -85,14 +61,7 @@ export default function Appbar() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
+          
           <Typography className={classes.title} variant="h6" noWrap>
             The PersonalTrainer
           </Typography>
@@ -100,13 +69,13 @@ export default function Appbar() {
           <div className={classes.root}>
             <Typography className={classes.title} variant="h6" noWrap>
               <Link to="/">
-                <Button variant="outlined" color="default">HOME</Button>
+                <Button variant="contained" color="default">HOME</Button>
               </Link>
               <Link to="/exercises">
                 <Button variant="contained" color="default">Exercises</Button>
               </Link>
-              <Link to="/types">
-                <Button variant="contained" color="default">Types</Button>
+              <Link to="/customers">
+                <Button variant="contained" color="default">Customers</Button>
               </Link>
               <Link to="/about">
                 <Button variant="contained" color="default">About</Button>
@@ -116,19 +85,7 @@ export default function Appbar() {
 
           </div>
 
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search', }}
-            />
-          </div>
+          
         </Toolbar>
 
       </AppBar>

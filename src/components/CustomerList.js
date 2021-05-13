@@ -4,23 +4,24 @@ import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 
-
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 
 
 
-export default function TrainingList(props) {
+export default function CustomerList(props) {
  
-
-
 
     const [rowData, setRowData] = useState([]);
 
     const columns = [
-        { field: 'date', sortable: true, filter: true, width: 200 },
-        { field: 'duration', sortable: true, filter: true },
-        { field: 'activity', sortable: true, filter: true },
+        { field: 'firstname', sortable: true, filter: true, width: 120 },
+        { field: 'lastname', sortable: true, filter: true, width: 120 },
+        { field: 'streetaddress', sortable: true, filter: true },
+        { field: 'postcode', sortable: true, filter: true, width: 100 },
+        { field: 'city', sortable: true, filter: true },
+        { field: 'email', sortable: true, filter: true },
+        { field: 'phone', sortable: true, filter: true },
         {
             headerName: "",
             width: 70,
@@ -36,9 +37,9 @@ export default function TrainingList(props) {
        
         
         <div className="ag-theme-material"
-                style={{ height: 670, maxWidth: '90%', margin: 'auto', padding: '10px' }}>
+                style={{ height: 670, width: '90%', margin: 'auto', padding: '10px' }}>
         <AgGridReact
-            rowData={props.trainings}
+            rowData={props.customers}
             columnDefs={columns}
 
             floatingFilter={true}
@@ -46,7 +47,7 @@ export default function TrainingList(props) {
                     paginationPageSize={10}
         />
         </div>
-     
+       
     </div>
     )
 }
