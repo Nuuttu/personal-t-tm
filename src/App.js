@@ -24,42 +24,41 @@ function App() {
       .then(response => response.json())
       .then(data => setTrainings(data.content))
       .catch(err => console.err(err))
-  }
-  
+  };
+
+  const [customers, setCustomers] = useState([]);
+
+  const fetchCustomers = () => {
+    fetch('https://customerrest.herokuapp.com/api/customers')
+      .then(response => response.json())
+      .then(data => setCustomers(data.content))
+      .catch(err => console.err(err))
+  };
+
   useEffect(() => {
+    fetchCustomers();
     fetchTrainings();
-}, []);
-
-const [customers, setCustomers] = useState([]);
-
-const fetchCustomers = () => {
-  fetch('https://customerrest.herokuapp.com/api/customers')
-    .then(response => response.json())
-    .then(data => setCustomers(data.content))
-    .catch(err => console.err(err))
-}
-useEffect(() => {
-  fetchCustomers();
-});
+    console.log("This needs to happen only once.");
+  }, []);
 
   return (
     <div>
 
-        <div position="static">
-          <Appbar />
-        </div>
+      <div position="static">
+        <Appbar />
+      </div>
 
-    <div className="App">
-      
+      <div className="App">
 
-      <Switch>
-              <Route exact path="/" component={LandingPage} />
-              <Route path="/exercises" ><TrainingList trainings={trainings} setTrainings={setTrainings} /></Route>
-              <Route path="/customers" ><CustomerList customers={customers} setCustomers={setCustomers} /></Route>
-              <Route path="/about" component={About} />
-              <Route render={() => <h1>Page not found</h1>} />
 
-            </Switch>
+        <Switch>
+          <Route exact path="/" component={LandingPage} />
+          <Route path="/exercises" ><TrainingList trainings={trainings} setTrainings={setTrainings} /></Route>
+          <Route path="/customers" ><CustomerList customers={customers} setCustomers={setCustomers} /></Route>
+          <Route path="/about" component={About} />
+          <Route render={() => <h1>Page not found</h1>} />
+
+        </Switch>
       </div>
 
     </div>

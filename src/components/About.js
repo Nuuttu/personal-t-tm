@@ -5,8 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles({
   root: {
     margin: 'auto',
-    width: '100%',
-    maxWidth: 500,
+    width: '90%',
+    maxWidth: 700,
+    padding: '10px',
   },
 });
 
@@ -15,18 +16,12 @@ export default function About() {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h1" component="h2" gutterBottom>
-        h1. Heading
-      </Typography>
-      <Typography variant="h2" gutterBottom>
-        h2. Heading
-      </Typography>
+
+      
       <Typography variant="h3" gutterBottom>
-        h3. Heading
+       Personal Trainer site
       </Typography>
-      <Typography variant="h4" gutterBottom>
-        h4. Heading
-      </Typography>
+      
       <Typography variant="h5" gutterBottom>
         h5. Heading
       </Typography>
@@ -52,12 +47,13 @@ export default function About() {
       <Typography variant="button" display="block" gutterBottom>
         button text
       </Typography>
-      <Typography variant="caption" display="block" gutterBottom>
-        caption text
-      </Typography>
       <Typography variant="overline" display="block" gutterBottom>
         overline text
       </Typography>
+      <Typography variant="caption" display="block" gutterBottom>
+        By Tuomo Miettinen
+      </Typography>
+      
     </div>
   );
 }

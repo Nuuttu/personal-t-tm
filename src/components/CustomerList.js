@@ -3,6 +3,10 @@ import AddTask from './AddTask';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import ViewTrainings from './ViewTrainings';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
@@ -23,12 +27,23 @@ export default function CustomerList(props) {
         { field: 'email', sortable: true, filter: true },
         { field: 'phone', sortable: true, filter: true },
         {
+            headerName: "Trainings",
+            width: 120,
+            cellRendererFramework: function (params) {
+               return <ViewTrainings url={params.data.links[2].href}/>
+            }
+        },
+        {
             headerName: "",
             width: 70,
             cellRendererFramework: function (params) {
-                return <button>Moi</button>
+                return <IconButton color='secondary' onClick={() => (console.log("Moi"))}>
+                    <DeleteIcon></DeleteIcon>
+
+                </IconButton>
             }
-        }
+        },
+        
     ]
     
 
