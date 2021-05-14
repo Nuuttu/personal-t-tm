@@ -4,6 +4,7 @@ import Appbar from './components/Appbar';
 import About from './components/About';
 import CustomerList from './components/CustomerList';
 import LandingPage from './components/LandingPage';
+import AddCustomer from './components/AddCustomer';
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -41,19 +42,51 @@ function App() {
     console.log("This needs to happen only once.");
   }, []);
 
+
+
+
+
+  const addCustomer = (newCustomer) => {
+
+    const requestOption = {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(newCustomer)
+    };
+    fetch('https://customerrest.herokuapp.com/api/customers', requestOption)
+        .then((result) => {
+            if (result.ok) {
+                console.log('ok');
+            } else {
+                alert('Something wrong');
+            }
+            console.log(result);
+        })
+        .then(fetchCustomers())
+        .catch(err => console.log(err));
+
+    fetchCustomers();
+}
+
   return (
     <div>
 
       <div position="static">
         <Appbar />
+        <AddCustomer addCustomer={addCustomer} />
       </div>
-
+      
       <div className="App">
 
 
         <Switch>
           <Route exact path="/" component={LandingPage} />
-          <Route path="/exercises" ><TrainingList trainings={trainings} setTrainings={setTrainings} /></Route>
+          <Route path="/exercises" ><TrainingList 
+          trainings={trainings} 
+          setTrainings={setTrainings} 
+          fetchCustomers={fetchCustomers} 
+          addCustomer={addCustomer}
+          /></Route>
           <Route path="/customers" ><CustomerList customers={customers} setCustomers={setCustomers} /></Route>
           <Route path="/about" component={About} />
           <Route render={() => <h1>Page not found</h1>} />
