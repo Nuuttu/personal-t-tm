@@ -21,7 +21,7 @@ const [t, setT] = useState(props.trainings);
 
     const columns = [
         { field: 'date', sortable: true, filter: true, width: 200, cellRenderer: (data) => {
-            return moment(data.createdAt).format('MM/DD/YYYY')
+            return moment(data.createdAt).format('DD/MM/YYYY')
         } },
         { field: 'duration', sortable: true, filter: true },
         { field: 'activity', sortable: true, filter: true },

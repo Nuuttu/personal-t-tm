@@ -8,6 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
+import Snackbar from '@material-ui/core/Snackbar';
 import {
   BrowserRouter as Router,
   Link
@@ -57,6 +58,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Appbar() {
   const classes = useStyles();
 
+
+  
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -89,6 +92,8 @@ export default function Appbar() {
         </Toolbar>
 
       </AppBar>
+
+    
     </div>
   );
 }

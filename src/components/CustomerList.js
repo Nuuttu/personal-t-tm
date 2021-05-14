@@ -8,7 +8,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
 import AddCustomer from './AddCustomer';
 
-import ViewTrainings from './ViewTrainings';
+import ViewTrainings, { handleHandleOpen } from './ViewTrainings';
+
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
@@ -19,7 +20,7 @@ import 'ag-grid-community/dist/styles/ag-theme-material.css';
 
 export default function CustomerList(props) {
 
-
+    const [customersUrl, setCustomersUrl] = useState('');
     const [rowData, setRowData] = useState([]);
     const [customersTrainings, setCustomersTrainings] = useState(props);
 
@@ -28,18 +29,21 @@ export default function CustomerList(props) {
         { field: 'firstname', sortable: true, filter: true, width: 120 },
         { field: 'lastname', sortable: true, filter: true, width: 120 },
         { field: 'streetaddress', sortable: true, filter: true },
-        { field: 'postcode', sortable: true, filter: true, width: 100 },
+        { field: 'postcode', sortable: true, filter: true, width: 120 },
         { field: 'city', sortable: true, filter: true },
         { field: 'email', sortable: true, filter: true },
         { field: 'phone', sortable: true, filter: true },
         {
             headerName: "Trainings",
+            field: 'links[2].href',
             width: 120,
             cellRendererFramework: function (params) {
                 return (
-                    <IconButton color='primary' onClick={() => (console.log(params.data.links[2].href))}>
-                        <ViewHeadlineIcon></ViewHeadlineIcon>
-                    </IconButton>
+                   
+                <ViewTrainings
+                 url={params.data.links[2].href}
+                 lastname={params.data.lastname}
+                 firstname={params.data.firstname} />
                 )
             }
         },
@@ -47,7 +51,7 @@ export default function CustomerList(props) {
             headerName: "",
             width: 70,
             cellRendererFramework: function (params) {
-                return <IconButton color='secondary' onClick={() => (console.log("Moi"))}>
+                return <IconButton color='secondary' onClick={() => (deleteCustomer(params.data.links[0].href))}>
                     <DeleteIcon></DeleteIcon>
                 </IconButton>
             }
@@ -56,12 +60,37 @@ export default function CustomerList(props) {
     ]
 
 
+
+    const deleteCustomer = (url) => {
+        if (window.confirm('Deleting customer?')) {
+            const requestOption = {
+                method: 'DELETE'
+            };
+
+            fetch(url, requestOption)
+                .then(response => {
+                    if (response.ok) {
+                        props.fetchCustomers();
+                        props.setMessage('Customer deleted');
+                        props.openSnackbar();
+                    }
+                    else {
+                        alert('Something failed...');
+                    }
+                })
+                .catch(err => console.error(err))
+        }
+
+
+    }
+
+
     return (
         <div>
 
-            <ViewTrainings url='https://customerrest.herokuapp.com/api/customers/107/trainings' />
+
             <div className="ag-theme-material"
-                style={{ height: 670, width: '90%', margin: 'auto', padding: '10px' }}>
+                style={{ height: 670, width: '95%', margin: 'auto', padding: '10px' }}>
                 <AgGridReact
                     rowData={props.customers}
                     columnDefs={columns}
@@ -71,7 +100,7 @@ export default function CustomerList(props) {
                     paginationPageSize={10}
                 />
             </div>
-            
+
 
         </div>
     )
