@@ -1,28 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import AddTask from './AddTask';
+
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ViewHeadlineIcon from '@material-ui/icons/ViewHeadline';
-import AddCustomer from './AddCustomer';
-
-import ViewTrainings, { handleHandleOpen } from './ViewTrainings';
+import EditCustomer from './EditCustomer';
+import AddTraining from './AddTraining';
+import ViewTrainings from './ViewTrainings';
 
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
+import { PinDropSharp } from '@material-ui/icons';
 
 
 
 
 
 export default function CustomerList(props) {
-
-    const [customersUrl, setCustomersUrl] = useState('');
-    const [rowData, setRowData] = useState([]);
-    const [customersTrainings, setCustomersTrainings] = useState(props);
 
 
     const columns = [
@@ -32,20 +26,42 @@ export default function CustomerList(props) {
         { field: 'postcode', sortable: true, filter: true, width: 120 },
         { field: 'city', sortable: true, filter: true },
         { field: 'email', sortable: true, filter: true },
-        { field: 'phone', sortable: true, filter: true },
+        { field: 'phone', sortable: true, filter: true, width: 130 },
         {
             headerName: "Trainings",
             field: 'links[2].href',
-            width: 120,
+            width: 110,
             cellRendererFramework: function (params) {
                 return (
-                   
-                <ViewTrainings
-                 url={params.data.links[2].href}
-                 lastname={params.data.lastname}
-                 firstname={params.data.firstname} />
-                )
-            }
+
+                    <ViewTrainings
+                        url={params.data.links[2].href}
+                        lastname={params.data.lastname}
+                        firstname={params.data.firstname}
+                    />
+                )}
+        },
+        {
+            headerName: "",
+            width: 70,
+            cellRendererFramework: function (params) {
+                return (
+                <AddTraining
+                link={params.data.links[1].href}
+                addTraining={addTraining}
+                />
+                )}
+        },
+        {
+            headerName: "",
+            field: '_links.self.href',
+            width: 70,
+            cellRendererFramework: params => 
+            <EditCustomer
+            link={params.data.links[0].href} 
+            customer={params.data} 
+            updateCustomer={updateCustomer} />
+
         },
         {
             headerName: "",
@@ -83,6 +99,46 @@ export default function CustomerList(props) {
 
 
     }
+
+    const updateCustomer = (url, updatedCustomer) => {
+        fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify(updatedCustomer),
+            headers: { 'Content-type': 'application/json' }
+        })
+            .then(_ => {
+                props.fetchCustomers();
+                props.setMessage('Customer updated');
+                props.openSnackbar();
+            })
+            .catch(err => console.error(err))
+    }
+
+
+    const addTraining = (newTraining) => {
+        const requestOption = {
+          method: 'POST',
+          headers: { 'Content-type': 'application/json' },
+          body: JSON.stringify(newTraining)
+        };
+        console.log(newTraining);
+        fetch('https://customerrest.herokuapp.com/api/trainings', requestOption)
+          .then((result) => {
+            if (result.ok) {
+              console.log('added training');
+              props.setMessage('Training added succesfully');
+              props.openSnackbar();
+            } else {
+              alert('Something wrong while adding training');
+            }
+            console.log(result);
+          })
+          .then(props.fetchCustomers())
+          .catch(err => console.error(err));
+    
+      }
+
+      
 
 
     return (

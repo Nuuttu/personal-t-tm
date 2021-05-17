@@ -3,12 +3,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
-import Snackbar from '@material-ui/core/Snackbar';
 import {
   BrowserRouter as Router,
   Link
@@ -74,11 +69,11 @@ export default function Appbar() {
               <Link to="/">
                 <Button variant="contained" color="default">HOME</Button>
               </Link>
-              <Link to="/exercises">
-                <Button variant="contained" color="default">Exercises</Button>
-              </Link>
               <Link to="/customers">
                 <Button variant="contained" color="default">Customers</Button>
+              </Link>
+              <Link to="/trainings">
+                <Button variant="contained" color="default">Trainings</Button>
               </Link>
               <Link to="/about">
                 <Button variant="contained" color="default">About</Button>

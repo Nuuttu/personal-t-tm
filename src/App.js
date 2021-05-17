@@ -62,7 +62,6 @@ function App() {
 
 
   const addCustomer = (newCustomer) => {
-
     const requestOption = {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
@@ -85,6 +84,10 @@ function App() {
     fetchCustomers();
   }
 
+
+  
+
+
   return (
     <div style={{ margin: 'auto', textAlign: 'center' }}>
 
@@ -98,19 +101,24 @@ function App() {
 
         <Switch>
           <Route exact path="/" component={LandingPage} />
-          <Route path="/exercises" ><TrainingList
-            trainings={trainings}
-            setTrainings={setTrainings}
-            fetchCustomers={fetchCustomers}
-            addCustomer={addCustomer}
-          /></Route>
+          
           <Route path="/customers" ><AddCustomer addCustomer={addCustomer} />
           <CustomerList
             customers={customers}
             setCustomers={setCustomers}
             fetchCustomers={fetchCustomers}
             setMessage={setMessage} 
-            openSnackbar={openSnackbar}/></Route>
+            openSnackbar={openSnackbar}/>
+            </Route>
+            <Route path="/trainings" ><TrainingList
+            trainings={trainings}
+            setTrainings={setTrainings}
+            fetchCustomers={fetchCustomers}
+            fetchTrainings={fetchTrainings}
+            addCustomer={addCustomer}
+            setMessage={setMessage} 
+            openSnackbar={openSnackbar}
+          /></Route>
           <Route path="/about" component={About} />
           <Route render={() => <h1>Page not found</h1>} />
 

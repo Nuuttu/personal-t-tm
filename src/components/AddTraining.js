@@ -7,6 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
 
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -30,29 +32,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function AddCustomers(props) {
+export default function AddTraining(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
 
 
 
-    const [newCustomer, setnewCustomer] = useState({
-        firstname: '',
-        lastname: '',
-        streetaddress: '',
-        postcode: '',
-        city: '',
-        email: '',
-        phone: ''
+    const [newTraining, setNewTraining] = useState({
+        date: '',
+        activity: '',
+        duration: '',
+        customer: props.link,
     })
 
     const inputChanged = (e) => {
-        setnewCustomer({ ...newCustomer, [e.target.id]: e.target.value });
+        setNewTraining({ ...newTraining, [e.target.id]: e.target.value });
     }
 
     const handleSave = () => {
-        props.addCustomer(newCustomer);
+        
+        props.addTraining(newTraining);
         setOpen(false);
     }
 
@@ -60,16 +60,22 @@ export default function AddCustomers(props) {
         setOpen(true);
     }
     const handleClose = () => {
+        
+        console.log((newTraining.date));
+        console.log((newTraining.customer));
         setOpen(false);
     }
 
     return (
         <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Add a customer
-      </Button>
+           
+
+            <IconButton color="primary" onClick={handleClickOpen}>
+                <AddIcon />
+            </IconButton>
+
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add customer</DialogTitle>
+                <DialogTitle id="form-dialog-title">Add Training</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Enter details
@@ -79,55 +85,26 @@ export default function AddCustomers(props) {
                         <div>
                             <TextField
                                 required
-                                id="firstname"
-                                label="Firstname"
+                                id="date"
+                                label="Time YYYY.MM.DD HH:MM"
                                 variant="outlined"
                                 onChange={inputChanged}
                             />
                             <TextField
                                 required
-                                id="lastname"
-                                label="Lastname"
+                                id="activity"
+                                label="Activity"
                                 variant="outlined"
                                 onChange={inputChanged}
                             />
                             <TextField
                                 required
-                                id="streetaddress"
-                                label="Streetaddress"
+                                id="duration"
+                                label="Duration"
                                 variant="outlined"
                                 onChange={inputChanged}
                             />
-                            <TextField
-                                required
-                                id="postcode"
-                                label="Postcode"
-                                variant="outlined"
-                                onChange={inputChanged}
-                            />
-                            <TextField
-                                required
-                                id="city"
-                                label="City"
-                                variant="outlined"
-                                onChange={inputChanged}
-                            />
-                            <TextField
-                                required
-                                id="email"
-                                label="Email"
-                                variant="outlined"
-                                onChange={inputChanged}
-                            />
-                            <TextField
-                                required
-                                id="phone"
-                                label="Phone"
-                                variant="outlined"
-                                onChange={inputChanged}
-                            />
-
-
+                            
                         </div>
                     </form>
                 </DialogContent>
@@ -136,7 +113,7 @@ export default function AddCustomers(props) {
                         Cancel
           </Button>
                     <Button onClick={handleSave} color="primary">
-                        Add Customer
+                        Add Training
           </Button>
                 </DialogActions>
             </Dialog>
