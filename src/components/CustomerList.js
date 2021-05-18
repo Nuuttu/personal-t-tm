@@ -47,6 +47,7 @@ export default function CustomerList(props) {
             cellRendererFramework: function (params) {
                 return (
                 <AddTraining
+                customer={params.data.firstname + ' ' + params.data.lastname}
                 link={params.data.links[1].href}
                 addTraining={addTraining}
                 />

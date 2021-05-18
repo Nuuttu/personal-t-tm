@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
+import moment from 'moment';
 
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -36,22 +37,22 @@ export default function AddTraining(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
-
-
+    moment().toISOString();
 
     const [newTraining, setNewTraining] = useState({
         date: '',
         activity: '',
         duration: '',
         customer: props.link,
-    })
+    });
 
     const inputChanged = (e) => {
         setNewTraining({ ...newTraining, [e.target.id]: e.target.value });
+        console.log(newTraining.date);
     }
 
     const handleSave = () => {
-        
+
         props.addTraining(newTraining);
         setOpen(false);
     }
@@ -60,22 +61,19 @@ export default function AddTraining(props) {
         setOpen(true);
     }
     const handleClose = () => {
-        
-        console.log((newTraining.date));
-        console.log((newTraining.customer));
         setOpen(false);
     }
 
     return (
         <div>
-           
+
 
             <IconButton color="primary" onClick={handleClickOpen}>
                 <AddIcon />
             </IconButton>
 
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add Training</DialogTitle>
+                <DialogTitle id="form-dialog-title">Add Training for {props.customer}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Enter details
@@ -83,13 +81,7 @@ export default function AddTraining(props) {
                     <form className={classes.root} noValidate autoComplete="off">
 
                         <div>
-                            <TextField
-                                required
-                                id="date"
-                                label="Time YYYY.MM.DD HH:MM"
-                                variant="outlined"
-                                onChange={inputChanged}
-                            />
+
                             <TextField
                                 required
                                 id="activity"
@@ -104,7 +96,18 @@ export default function AddTraining(props) {
                                 variant="outlined"
                                 onChange={inputChanged}
                             />
-                            
+                            <TextField
+                                id="date"
+                                label="Date and Time"
+                                type="datetime-local"
+                                defaultValue={moment(Date.now()).format('YYYY-MM-DDTHH:MM')}
+                                className={classes.textField}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                onChange={inputChanged}
+                            />
+
                         </div>
                     </form>
                 </DialogContent>

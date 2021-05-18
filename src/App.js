@@ -4,9 +4,11 @@ import Appbar from './components/Appbar';
 import About from './components/About';
 import CustomerList from './components/CustomerList';
 import LandingPage from './components/LandingPage';
+import TrainerCalendar from './components/TrainerCalendar';
 import AddCustomer from './components/AddCustomer';
 import React, { useState, useEffect } from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
+import moment from 'moment';
 
 import {
   BrowserRouter as Router,
@@ -19,7 +21,7 @@ import {
 
 function App() {
 
-  const [trainings, setTrainings] = useState([]);
+
 
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
@@ -32,7 +34,7 @@ function App() {
   }
 
 
-
+  const [trainings, setTrainings] = useState([]);
   const fetchTrainings = () => {
     fetch('https://customerrest.herokuapp.com/api/trainings')
       .then(response => response.json())
@@ -41,7 +43,6 @@ function App() {
   };
 
   const [customers, setCustomers] = useState([]);
-
   const fetchCustomers = () => {
     fetch('https://customerrest.herokuapp.com/api/customers')
       .then(response => response.json())
@@ -49,16 +50,20 @@ function App() {
       .catch(err => console.err(err))
   };
 
-  useEffect(() => {
-    fetchCustomers();
-    fetchTrainings();
-    console.log("This needs to happen only once.");
-  }, []);
 
-
+  const [allTrainings, setAllTrainings] = useState([]);
+  const fetchAllTrainings = () => {
+    fetch('https://customerrest.herokuapp.com/gettrainings', { method: 'GET' })
+      .then(response => response.json())
+      .then(data => setAllTrainings(data))
+      .catch(err => {
+        console.error(err);
+        setMessage('training data loading failed');
+        openSnackbar();
+      })
+  };
 
   
-
 
 
   const addCustomer = (newCustomer) => {
@@ -80,12 +85,37 @@ function App() {
       })
       .then(fetchCustomers())
       .catch(err => console.log(err));
-
     fetchCustomers();
   }
 
 
+  var [allEvents, setAllEvents] = useState([]);
+  const eventParsing = () => {
+    for (const [index, value] of allTrainings.entries()) {
+      allEvents.push({
+        'id': index,
+        'title': value.activity + ' / ' + value.customer.firstname + ' ' + value.customer.lastname,
+        'start': new Date(moment(value.date)),
+        'end': new Date(new Date(moment(value.date)).setMinutes(new Date().getMinutes() + value.duration)),
+      });
+    };
+  }
+
+  const refreshCalendar = () => {
+    fetchAllTrainings();
+    eventParsing();
+  }
+
   
+
+
+  useEffect(() => {
+    fetchCustomers();
+    fetchTrainings();
+    fetchAllTrainings();
+    eventParsing();
+  }, []);
+
 
 
   return (
@@ -93,32 +123,37 @@ function App() {
 
       <div position="static">
         <Appbar />
-
       </div>
-      
+
       <div className="App">
-
-
         <Switch>
-          <Route exact path="/" component={LandingPage} />
-          
-          <Route path="/customers" ><AddCustomer addCustomer={addCustomer} />
-          <CustomerList
-            customers={customers}
-            setCustomers={setCustomers}
-            fetchCustomers={fetchCustomers}
-            setMessage={setMessage} 
-            openSnackbar={openSnackbar}/>
-            </Route>
-            <Route path="/trainings" ><TrainingList
-            trainings={trainings}
-            setTrainings={setTrainings}
-            fetchCustomers={fetchCustomers}
-            fetchTrainings={fetchTrainings}
-            addCustomer={addCustomer}
-            setMessage={setMessage} 
-            openSnackbar={openSnackbar}
-          /></Route>
+          <Route exact path="/">
+            <button onClick={() => setAllEvents([])}>refresh</button>
+            <button onClick={() => refreshCalendar()}>Click to show events</button>
+            <TrainerCalendar
+              allEvents={allEvents}
+            />
+          </Route>
+          <Route path="/customers" >
+            <AddCustomer addCustomer={addCustomer} />
+            <CustomerList
+              customers={customers}
+              setCustomers={setCustomers}
+              fetchCustomers={fetchCustomers}
+              setMessage={setMessage}
+              openSnackbar={openSnackbar} />
+          </Route>
+          <Route path="/trainings" >
+            <button onClick={() => fetchTrainings()}>refresh list</button>
+            <TrainingList
+              trainings={trainings}
+              setTrainings={setTrainings}
+              fetchCustomers={fetchCustomers}
+              fetchTrainings={fetchTrainings}
+              addCustomer={addCustomer}
+              setMessage={setMessage}
+              openSnackbar={openSnackbar}
+            /></Route>
           <Route path="/about" component={About} />
           <Route render={() => <h1>Page not found</h1>} />
 
@@ -127,7 +162,7 @@ function App() {
       </div>
       <Snackbar
         open={open}
-        autoHideDuration={2000}
+        autoHideDuration={3000}
         message={message}
         onClose={closeSnackbar}
       />

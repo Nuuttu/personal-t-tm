@@ -41,8 +41,7 @@ export default function ViewTrainings(props) {
         fetch(props.url)
             .then(response => response.json())
             .then(data => {
-                console.log(data.content);
-                if(data.content[0].hasOwnProperty('date')) {
+                if (data.content[0].hasOwnProperty('date')) {
                     setCustomersTrainings(data.content);
                 }
             })
@@ -97,7 +96,7 @@ export default function ViewTrainings(props) {
                             <TableHead>
                                 <TableRow>
                                     <TableCell align="left">Date</TableCell>
-
+                                    <TableCell align="left">Time</TableCell>
                                     <TableCell align="right">Activity</TableCell>
                                     <TableCell align="left">Duration</TableCell>
                                     <TableCell align="left"></TableCell>
@@ -109,10 +108,17 @@ export default function ViewTrainings(props) {
                                         <TableCell >
                                             {moment(row.date).format('DD/MM/YYYY')}
                                         </TableCell>
-
+                                        <TableCell >
+                                            {moment(row.date).format('HH:MM')}
+                                        </TableCell>
                                         <TableCell align="right">{row.activity}</TableCell>
                                         <TableCell align="left">{row.duration}&nbsp;min</TableCell>
-                                        <TableCell><IconButton color='default' onClick={() => deleteTraining(row.links[1].href)}><DeleteIcon /></IconButton></TableCell>
+                                        <TableCell>
+                                            <IconButton color='default' onClick={() => deleteTraining(row.links[1].href)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </TableCell>
+
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -121,7 +127,7 @@ export default function ViewTrainings(props) {
 
                 </DialogContent>
                 <DialogActions>
-                   
+
                     <Button onClick={handleClose} color="primary">
                         Close
           </Button>

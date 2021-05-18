@@ -67,7 +67,7 @@ export default function Appbar() {
           <div className={classes.root}>
             <Typography className={classes.title} variant="h6" noWrap>
               <Link to="/">
-                <Button variant="contained" color="default">HOME</Button>
+                <Button variant="contained" color="default">Calendar</Button>
               </Link>
               <Link to="/customers">
                 <Button variant="contained" color="default">Customers</Button>
